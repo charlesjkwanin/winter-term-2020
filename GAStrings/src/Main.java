@@ -15,9 +15,9 @@ public class Main {
     public static void main(String[] args) {
 	String target = "to be or not to be";
 	
-	Population p = new Population(target);
-	p.run();
-	//run(p, target);
+	Population population = new Population(target);
+	population.run();
+	
     }
 
 

@@ -1,8 +1,5 @@
 package src.GAStrings.src;
 
-import java.util.ArrayList;
-
-
 /**
  * @author ckwanin
  *
@@ -17,7 +14,7 @@ public class Main {
 	
 	Population population = new Population(target);
 	population.run();
-	
+
     }
 
 

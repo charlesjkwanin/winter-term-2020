@@ -1,15 +1,7 @@
 package src.GAStrings.src;
 
-import src.GAStrings.src.Entity;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-
-/**
- *
- */
 
 /**
  * @author ckwanin
@@ -23,22 +15,20 @@ public class Population {
     private String target;
     private ArrayList<Entity> matingPool;
 	private String generationBestString;
-    private double generationBestFitnessScore;
 
 
-    /**
+	/**
      *
      * @param target The target string to try to predict
      */
 	Population(String target) {
         generationBestString = "";
-        generationBestFitnessScore = 0.0;
 
-        this.target = target;
+		this.target = target;
 
-        matingPool = new ArrayList<Entity>();
+		matingPool = new ArrayList<>();
 
-        entities = new ArrayList<Entity>(POPULATION_SIZE);
+		entities = new ArrayList<>(POPULATION_SIZE);
 
         for (int i = 0; i < POPULATION_SIZE; i++) {
             entities.add(new Entity(target));
@@ -78,15 +68,14 @@ public class Population {
             }
         }
         generationBestString = bestStringSoFar;
-        generationBestFitnessScore = bestFitnessScoreSoFar;
-    }
+	}
 
     /**
      *
      * A mating pool that is proportionate to the fitness score for each string
      */
 	private void generateMatingPoolWheelOfFortune() {
-        matingPool = new ArrayList<Entity>();
+		matingPool = new ArrayList<>();
         for (Entity e : entities) {
             double fitnessScore = e.evaluateFitness();
             for (double i = 0; i < fitnessScore; ++i) {
@@ -107,7 +96,7 @@ public class Population {
         Random rand = new Random();
 
         if (matingPool.size() == 0) {
-            return new ArrayList<Entity>();
+			return new ArrayList<>();
         }
 
         // generate two random indices
@@ -131,15 +120,16 @@ public class Population {
      * @return Parents generated using Monte Carlo Method
      */
     public ArrayList<Entity> generateParentsMonteCarlo() {
-        ArrayList<Entity> parents = new ArrayList<Entity>();
+		ArrayList<Entity> parents = new ArrayList<>();
         int numberOfParents = 2;
         Random rand = new Random();
         for (int i = 0; i < numberOfParents; ++i) {
             int iterationCount = 0;
-            int previousIndex = 0;
+
             while (true) {
                 // generate random number to use to index into the population
                 int index = rand.nextInt(POPULATION_SIZE);
+				int previousIndex = index;
 
                 while (previousIndex == index) {
                     index = rand.nextInt(POPULATION_SIZE);
@@ -171,7 +161,7 @@ public class Population {
      * Pretty Print the elements of an ArrayList
      * @return A string representation of the given ArrayList
      */
-    public String matingPoolPretty(ArrayList<Entity> list) {
+	public String prettyEntityList(ArrayList<Entity> list) {
         StringBuilder sb = new StringBuilder();
 
         for (Entity e : list) {
@@ -181,7 +171,7 @@ public class Population {
     }
 
     private void clear() {
-        entities = new ArrayList<Entity>();
+		entities = new ArrayList<>();
     }
 
     private void add(Entity e) {

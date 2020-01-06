@@ -1,3 +1,5 @@
+package src.GAStrings.src;
+
 import java.util.Random;
 
 /**

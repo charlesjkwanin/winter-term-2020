@@ -1,10 +1,14 @@
+package src.GAStrings.src;
+
+import src.GAStrings.src.Entity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 /**
- * 
+ *
  */
 
 /**
@@ -13,210 +17,219 @@ import java.util.Random;
  */
 public class Population {
 
-    ArrayList<Entity> entities; // list of entities that form this population
-    public final static int POPULATION_SIZE = 1000;
-    String target;
-    ArrayList<Entity> matingPool;
-    String generationBestString;
-    double generationBestFitnessScore;
-    Map<Entity, Double> fitnessScores;
+    private ArrayList<Entity> entities; // list of entities that form this population
+
+	private final static int POPULATION_SIZE = 1000;
+    private String target;
+    private ArrayList<Entity> matingPool;
+	private String generationBestString;
+    private double generationBestFitnessScore;
+
 
     /**
-     * 
-     * @param target
+     *
+     * @param target The target string to try to predict
      */
-    public Population(String target) {
-	fitnessScores = new HashMap<>();
-	generationBestString = "";
-	generationBestFitnessScore = 0.0;
+	Population(String target) {
+        generationBestString = "";
+        generationBestFitnessScore = 0.0;
 
-	this.target = target;
+        this.target = target;
 
-	matingPool = new ArrayList<Entity>();
+        matingPool = new ArrayList<Entity>();
 
-	entities = new ArrayList<Entity>(POPULATION_SIZE);
+        entities = new ArrayList<Entity>(POPULATION_SIZE);
 
-	for (int i=0; i<POPULATION_SIZE; i++) {
-	    entities.add(new Entity(target));
-	}
+        for (int i = 0; i < POPULATION_SIZE; i++) {
+            entities.add(new Entity(target));
+        }
 
     }
 
-    public Population() {
-	this("");
-	this.clear();
+    private Population() {
+        this("");
+        this.clear();
     }
 
     /**
      * A string representation of the Population of Entities
-     * @return
+     * @return A string representation of the members of this population
      */
     public String toString() {
-	StringBuilder sb = new StringBuilder();
-	for (Entity e: entities) {
-	    sb.append(e.toString()).append("\n");
-	}
-	return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        for (Entity e : entities) {
+            sb.append(e.toString()).append("\n");
+        }
+        return sb.toString();
     }
-    
-    void findBest() {
-	String bestStringSoFar = "";
-	double bestFitnessScoreSoFar = Integer.MIN_VALUE;
-	for (Entity e: entities) {
-	    double fitnessScore = e.evaluateFitness();
-	    if (fitnessScore > bestFitnessScoreSoFar) {
-		bestStringSoFar = e.toString();
-		bestFitnessScoreSoFar = fitnessScore;
-	    }
-     }
-	generationBestString = bestStringSoFar;
-	generationBestFitnessScore = bestFitnessScoreSoFar;
+
+	/**
+	 * Find the best string for the current population
+	 * Best is the string closest to the target string
+	 */
+	private void findBest() {
+        String bestStringSoFar = "";
+        double bestFitnessScoreSoFar = Integer.MIN_VALUE;
+        for (Entity e : entities) {
+            double fitnessScore = e.evaluateFitness();
+            if (fitnessScore > bestFitnessScoreSoFar) {
+                bestStringSoFar = e.toString();
+                bestFitnessScoreSoFar = fitnessScore;
+            }
+        }
+        generationBestString = bestStringSoFar;
+        generationBestFitnessScore = bestFitnessScoreSoFar;
     }
 
     /**
-     * 
-     * @return A mating pool that is proportionate to the fitness score for each string
+     *
+     * A mating pool that is proportionate to the fitness score for each string
      */
-    void generateMatingPoolWheelOfFortune() {
-	matingPool = new ArrayList<Entity>();
-	for (Entity e: entities) {
-	    double fitnessScore = e.evaluateFitness();
-	    for (double i=0; i<fitnessScore; ++i) {
-		matingPool.add(e);
-	    }
-	}
+	private void generateMatingPoolWheelOfFortune() {
+        matingPool = new ArrayList<Entity>();
+        for (Entity e : entities) {
+            double fitnessScore = e.evaluateFitness();
+            for (double i = 0; i < fitnessScore; ++i) {
+                matingPool.add(e);
+            }
+        }
 
-	
+
     }
 
-    public ArrayList<Entity> generateParentsWheel() {
-	generateMatingPoolWheelOfFortune();
-	Random rand = new Random();
+	/**
+	 *  Generate parents using the Wheel of Fortune method
+	 *  DNAs that are closer to the target string are more likely to be chosen as parents
+	 * @return An arraylist containing two parents to be used in reproduction
+	 */
+	private ArrayList<Entity> generateParentsWheel() {
+        generateMatingPoolWheelOfFortune();
+        Random rand = new Random();
 
-	if (matingPool.size() == 0) {
-	    return new ArrayList<Entity>();
-	}
+        if (matingPool.size() == 0) {
+            return new ArrayList<Entity>();
+        }
 
-	int index1 = rand.nextInt(matingPool.size());
-	int index2 = rand.nextInt(matingPool.size());
-	while (index1 == index2) {
-	    index1 = rand.nextInt(matingPool.size());
-	    index2 = rand.nextInt(matingPool.size());
-	}
+        // generate two random indices
+        int index1 = rand.nextInt(matingPool.size());
+        int index2 = rand.nextInt(matingPool.size());
+        while (index1 == index2) {
+            index1 = rand.nextInt(matingPool.size());
+            index2 = rand.nextInt(matingPool.size());
+        }
 
-	ArrayList<Entity> parents = new ArrayList<>();
-	parents.add(matingPool.get(index1));
-	parents.add(matingPool.get(index2));
+        // query the mating pool for the two random parents.
+        ArrayList<Entity> parents = new ArrayList<>();
+        parents.add(matingPool.get(index1));
+        parents.add(matingPool.get(index2));
 
-	return parents;
+        return parents;
     }
 
     /**
      * Return a list of two parents to be used in the crossover/reproduction methods.
-     * @return
+     * @return Parents generated using Monte Carlo Method
      */
     public ArrayList<Entity> generateParentsMonteCarlo() {
-	ArrayList<Entity> parents = new ArrayList<Entity>();
-	int numberOfParents = 2;
-	Random rand = new Random(); 
-	for (int i=0; i<numberOfParents; ++i) {
-	    int iterationCount = 0;
-	    int previousIndex = 0;
-	    while (true) {
-		// generate random number to use to index into the population
-		int index = rand.nextInt(POPULATION_SIZE);
+        ArrayList<Entity> parents = new ArrayList<Entity>();
+        int numberOfParents = 2;
+        Random rand = new Random();
+        for (int i = 0; i < numberOfParents; ++i) {
+            int iterationCount = 0;
+            int previousIndex = 0;
+            while (true) {
+                // generate random number to use to index into the population
+                int index = rand.nextInt(POPULATION_SIZE);
 
-		while (previousIndex == index) {
-		    index = rand.nextInt(POPULATION_SIZE);
-		}
+                while (previousIndex == index) {
+                    index = rand.nextInt(POPULATION_SIZE);
+                }
 
-		Entity e = entities.get(index);
-		double qualifying = rand.nextDouble(); // generate a qualifying random number
+                Entity e = entities.get(index);
+                double qualifying = rand.nextDouble(); // generate a qualifying random number
 
-		double fitnessScore = e.evaluateFitness();
+                double fitnessScore = e.evaluateFitness();
 
-		if  (fitnessScore > qualifying) {
-		    parents.add(e);
-		    previousIndex = index;
-		    break;
-		}
-		iterationCount++;
+                if (fitnessScore > qualifying) {
+                    parents.add(e);
+                    previousIndex = index;
+                    break;
+                }
+                iterationCount++;
 
-		// if the monte carlo method runs too long, just return the current entity
-		if (iterationCount > 1000000) {
-		    parents.add(e);
-		    break;
-		}
-	    }
-	}
-	return parents;
+                // if the monte carlo method runs too long, just return the current entity
+                if (iterationCount > 1000000) {
+                    parents.add(e);
+                    break;
+                }
+            }
+        }
+        return parents;
     }
 
     /**
      * Pretty Print the elements of an ArrayList
-     * @returnp.findBest();
-	
-	System.out.println(generationBestString + " ");
+     * @return A string representation of the given ArrayList
      */
     public String matingPoolPretty(ArrayList<Entity> list) {
-	StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-	for (Entity e: list) {
-	    sb.append(e.toString()).append("\n");
-	}
-	return sb.toString();
+        for (Entity e : list) {
+            sb.append(e.toString()).append("\n");
+        }
+        return sb.toString();
     }
 
     private void clear() {
-	entities = new ArrayList<Entity>();
+        entities = new ArrayList<Entity>();
     }
 
-    public void add(Entity e) {
-	this.entities.add(e);
+    private void add(Entity e) {
+        this.entities.add(e);
     }
 
-    public void run() {
-	int generations = 1;
-	Population p = new Population("cart");
-	Population newPopulation = new Population();
-	
-	System.out.println(p);
-	
-	p.findBest();
-	
-	//System.out.println("The best string of generation" + generations + " is: " + generationBestString);
+    void run() {
+        Population p = this;
+        String prevTarget = target;
+        int generations = 1;
 
-	while (!generationBestString.equals(target)) {
-	    //System.out.println("Generation " + generations);
+        while (!p.generationBestString.equals(target)) {
+            System.out.println("Generation " + generations);
 
-	    int count = 0;
+            Population newPopulation = new Population();
+            newPopulation.target = prevTarget;
+            int count = 0;
 
-	    String closest = "";
-	    
-	    while(count < POPULATION_SIZE) {
-		ArrayList<Entity> parents = generateParentsWheel();
-		Entity child = parents.get(0).equalChanceCrossover(parents.get(1));
-		child.mutate(0.01);
-		newPopulation.add(child);
-		count++;
-	    }
-	    
-	    System.out.println(newPopulation);
-	    newPopulation.findBest();
-	    
-	    newPopulation = new Population();
-	    
-	    
-	    //System.out.println(generationBestString + " ");
-	    
-	    generations++;
+            while (count < Population.POPULATION_SIZE) {
+                ArrayList<Entity> parents = p.generateParentsWheel();
+                Entity child = parents.get(0).equalChanceCrossover(parents.get(1));
+                child.mutate(0.01);
+                newPopulation.add(child);
+                count++;
+            }
 
-	    if (generations > 3) {
-		break;
-	    }
-	}
+            newPopulation.findBest();
 
-	//System.out.println("The overall best string is: " + generationBestString);
+            System.out.println("The best string of generation " + generations + " is: " + newPopulation.generationBestString);
+
+            p = newPopulation;
+
+            if (newPopulation.generationBestString.equals(target)) {
+                break;
+            }
+            generations++;
+
+            System.out.println();
+
+            if (generations > 1000) {
+                break;
+            }
+        }
+
+        System.out.println();
+
+
+        System.out.println("The overall best string after " + generations + " generations is: " + p.generationBestString);
     }
 
 

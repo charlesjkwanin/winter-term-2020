@@ -1,7 +1,7 @@
 package src.GAStrings.src;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author ckwanin
@@ -177,33 +177,57 @@ public class Population {
         this.entities.add(e);
     }
 
+	private void selectBestFitCandidates() {
+		Map<Entity, Double> scoreMap = new HashMap<>();
+		for (Entity e : entities) {
+			double score = e.evaluateFitness();
+			scoreMap.putIfAbsent(e, score);
+		}
+
+		Map<Entity, Double> best =
+				scoreMap.entrySet().stream()
+						.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+						.limit(POPULATION_SIZE)
+						.collect(Collectors.toMap(
+								Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+		ArrayList<Entity> top = new ArrayList<>();
+
+		for (Entity e : best.keySet()) {
+			top.add(e);
+		}
+
+		this.entities = top;
+	}
+
     void run() {
+
+		// TODO: make children compete with some of the best candidates from the previous generation
         Population p = this;
         String prevTarget = target;
         int generations = 1;
 
         while (!p.generationBestString.equals(target)) {
             System.out.println("Generation " + generations);
-
-            Population newPopulation = new Population();
-            newPopulation.target = prevTarget;
             int count = 0;
 
+			// create 1000 new children, and use them as the entities in the next generation
+			// then choose the top 1000 best fitting entities between children and parents, and proceed.
             while (count < Population.POPULATION_SIZE) {
                 ArrayList<Entity> parents = p.generateParentsWheel();
-				Entity child = parents.get(0).randomMidpointCrossover(parents.get(1));
+				Entity child = parents.get(0).equalChanceCrossover(parents.get(1));
                 child.mutate(0.01);
-                newPopulation.add(child);
+				p.add(child);
                 count++;
             }
 
-            newPopulation.findBest();
+			p.findBest();
 
-            System.out.println("The best string of generation " + generations + " is: " + newPopulation.generationBestString);
+			System.out.println("The best string of generation " + generations + " is: " + p.generationBestString);
 
-            p = newPopulation;
+			selectBestFitCandidates();
 
-            if (newPopulation.generationBestString.equals(target)) {
+			if (p.generationBestString.equals(target)) {
                 break;
             }
             generations++;

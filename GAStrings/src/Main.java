@@ -63,6 +63,7 @@ public class Main {
 	}
 	
 	System.out.println();
+	generations--;
 	System.out.println("The overall best string after " + generations + " generations is: " + p.generationBestString);
     }
 

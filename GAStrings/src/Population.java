@@ -142,8 +142,7 @@ public class Population {
 
                 if (fitnessScore > qualifying) {
                     parents.add(e);
-                    previousIndex = index;
-                    break;
+					break;
                 }
                 iterationCount++;
 
@@ -192,7 +191,7 @@ public class Population {
 
             while (count < Population.POPULATION_SIZE) {
                 ArrayList<Entity> parents = p.generateParentsWheel();
-                Entity child = parents.get(0).equalChanceCrossover(parents.get(1));
+				Entity child = parents.get(0).randomMidpointCrossover(parents.get(1));
                 child.mutate(0.01);
                 newPopulation.add(child);
                 count++;

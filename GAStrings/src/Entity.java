@@ -11,6 +11,7 @@ public class Entity {
     private Character[] DNA = new Character[MAX_LENGTH]; // the DNA of this entity
     private char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' '};
     private String target;
+    private Random rand;
 
     /**
      * Construct a new entity, with a randomly generated DNA
@@ -18,22 +19,24 @@ public class Entity {
     public Entity(String target) {
         this.target = target;
         // TODO: maybe use proportions so that some of the most frequently used letters appear more often than not
-        Random rand = new Random();
+        this.rand = new Random();
         int randomNumber = rand.nextInt(27);
         for (int i = 0; i < MAX_LENGTH; i++) {
             DNA[i] = alphabet[randomNumber];
             randomNumber = rand.nextInt(27);
         }
+
     }
 
     public Entity() {
-        Random rand = new Random();
+        this.rand = new Random();
         int randomNumber = rand.nextInt(27);
         for (int i = 0; i < MAX_LENGTH; i++) {
             DNA[i] = alphabet[randomNumber];
             randomNumber = rand.nextInt(27);
         }
 
+        this.rand = new Random();
     }
 
     private void setTarget(String newTarget) {
@@ -77,7 +80,7 @@ public class Entity {
         Entity child = new Entity();
         child.setTarget(this.target);
 
-        Random rand = new Random();
+
         int idx = rand.nextInt(MAX_LENGTH);
 
         for (int i = 0; i < MAX_LENGTH; i++) {
@@ -100,7 +103,6 @@ public class Entity {
         Entity child = new Entity();
         child.setTarget(this.target);
 
-        Random rand = new Random();
 
         for (int i = 0; i < MAX_LENGTH; i++) {
             int idx = rand.nextInt(2);
@@ -120,7 +122,7 @@ public class Entity {
      * @param mutationRate Rate at which mutation occurs
      */
     void mutate(double mutationRate) {
-        Random rand = new Random();
+
         for (int i = 0; i < MAX_LENGTH; i++) {
             if (rand.nextDouble() < mutationRate) {
                 this.DNA[i] = alphabet[rand.nextInt(27)];

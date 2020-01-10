@@ -58,7 +58,7 @@ public class Render extends PApplet {
 
         size(400, 400);
 
-        population = new Population(5, true);
+        population = new Population(100, true);
         initialDist = (int) population.getFittest().getDistance();
 
     }

@@ -45,6 +45,12 @@ public class City {
         sketch.ellipse(getX(), getY(), 25, 25);
     }
 
+    /**
+     * Connect this city with a given city, writing the given number inside this city's representation
+     *
+     * @param city City to connect to
+     * @param idx  The index of this city in the given tour
+     */
     void connect(City city, int idx) {
         sketch.line(getX(), getY(), city.getX(), city.getY());
         String num = idx + "";

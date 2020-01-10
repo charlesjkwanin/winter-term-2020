@@ -99,11 +99,14 @@ public class Tour {
         return sb.toString();
     }
 
+    /**
+     *
+     */
     public void render() {
         for (int i = 0; i < tourSize(); i++) {
             City c = getCity(i);
             c.render();
-            if (i + 1 < tourSize() - 1) {
+            if (i + 1 < tourSize()) {
                 c.connect(getCity(i + 1), i + 1);
             } else {
                 c.connect(getCity(0), i + 1);

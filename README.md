@@ -26,7 +26,7 @@ To choose the parents, we have two methods:
   
   - Equal Chance Crossover
   Here, each parent has an equal chance of providing the each specific gene character. We flip a coin, HEADS we choose a the corresponding character from parent 1, TAIL we choose from parent 2.
-  
+ 
   ####5. Create new generation
   We add each child to a new population set. Once we have aas many children as we had in the original population, we say a generation has ended.
   

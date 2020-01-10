@@ -7,7 +7,7 @@ public class Population {
     private Entity[] population;
     private double populationFitness = -1;
 
-    public Population(int populationSize) {
+    Population(int populationSize) {
         this.population = new Entity[populationSize];
     }
 
@@ -20,11 +20,11 @@ public class Population {
         }
     }
 
-    public Entity[] getEntities() {
+    Entity[] getEntities() {
         return this.population;
     }
 
-    public Entity getFittest(int index) {
+    Entity getFittest(int index) {
         Arrays.sort(this.population, (o1, o2) -> Double.compare(o2.getFitness(), o1.getFitness()));
         return population[index];
     }
@@ -33,19 +33,19 @@ public class Population {
         return populationFitness;
     }
 
-    public void setPopulationFitness(double populationFitness) {
+    void setPopulationFitness(double populationFitness) {
         this.populationFitness = populationFitness;
     }
 
-    public int size() {
+    int size() {
         return this.population.length;
     }
 
-    public Entity setEntity(int idx, Entity entity) {
+    Entity setEntity(int idx, Entity entity) {
         return this.population[idx] = entity;
     }
 
-    public Entity getEntity(int idx) {
+    Entity getEntity(int idx) {
         return this.population[idx];
     }
 

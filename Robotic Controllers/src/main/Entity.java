@@ -22,7 +22,7 @@ public class Entity {
         }
     }
 
-    public void setGene(int index, int value) {
+    void setGene(int index, int value) {
         this.chromosome[index] = value;
     }
 
@@ -30,11 +30,11 @@ public class Entity {
         return this.chromosome;
     }
 
-    public int chromosomeLength() {
+    int chromosomeLength() {
         return this.chromosome.length;
     }
 
-    public int getGene(int idx) {
+    int getGene(int idx) {
         return this.chromosome[idx];
     }
 
@@ -42,7 +42,7 @@ public class Entity {
         return this.fitness;
     }
 
-    public void setFitness(double fitness) {
+    void setFitness(double fitness) {
         this.fitness = fitness;
     }
 

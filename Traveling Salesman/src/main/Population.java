@@ -17,11 +17,11 @@ public class Population {
         }
     }
 
-    Tour getTour(int tourIndex) {
+    private Tour getTour(int tourIndex) {
         return tours[tourIndex];
     }
 
-    void saveTour(int idx, Tour tour) {
+    private void saveTour(int idx, Tour tour) {
         tours[idx] = tour;
     }
 
@@ -124,7 +124,7 @@ public class Population {
             Tour parent1 = tournamentSelection();
             Tour parent2 = tournamentSelection();
 
-            Tour child = crossover(parent1, parent2);
+            Tour child = crossover(parent1, parent2); // reproduce through crossover
             child.mutate();
             newPopulation.saveTour(i, child);
         }

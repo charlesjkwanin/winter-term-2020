@@ -14,7 +14,7 @@ public class Render extends PApplet {
 
     @Override
     public void settings() {
-        // TODO: Customize screen size and so on here
+
         City city = new City(this, 60, 200);
         TourManager.addCity(city);
         City city2 = new City(this, 180, 200);

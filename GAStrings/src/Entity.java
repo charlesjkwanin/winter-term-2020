@@ -120,12 +120,11 @@ public class Entity {
     /**
      * Mutate this Entity using the given mutation rate
      *
-     * @param mutationRate Rate at which mutation occurs
      */
-    void mutate(double mutationRate) {
+    void mutate() {
 
         for (int i = 0; i < MAX_LENGTH; i++) {
-            if (rand.nextDouble() < mutationRate) {
+            if (rand.nextDouble() < 0.01) {
                 this.DNA[i] = alphabet[rand.nextInt(alphabetLength)];
             }
         }

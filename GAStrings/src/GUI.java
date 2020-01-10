@@ -4,9 +4,9 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 public class GUI extends PApplet {
-    String target;
-    Population population;
-    PFont f;
+    private String target;
+    private Population population;
+    private PFont f;
 
     public static void main(String[] args) {
         PApplet.main("src.GAStrings.src.GUI");
@@ -36,7 +36,7 @@ public class GUI extends PApplet {
         }
     }
 
-    void displayInfo() {
+    private void displayInfo() {
         background(255);
         // Display current status of population
         String fittest = population.getBest();

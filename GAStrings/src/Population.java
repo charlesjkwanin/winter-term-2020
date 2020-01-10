@@ -12,7 +12,7 @@ public class Population {
 	private ArrayList<Entity> entities; // list of entities that form this population
 	private String target;
 	private ArrayList<Entity> matingPool;
-	private String generationBestString;
+	private String generationBestString = "";
 	private int generations = 1;
 
 
@@ -20,8 +20,6 @@ public class Population {
 	 * @param target The target string to try to predict
 	 */
 	Population(String target) {
-		generationBestString = "";
-
 		this.target = target;
 
 		matingPool = new ArrayList<>();
@@ -114,7 +112,7 @@ public class Population {
 	 *
 	 * @return Parents generated using Monte Carlo Method
 	 */
-	public ArrayList<Entity> generateParentsMonteCarlo() {
+	private ArrayList<Entity> generateParentsMonteCarlo() {
 		ArrayList<Entity> parents = new ArrayList<>();
 		int numberOfParents = 2;
 		Random rand = new Random();
@@ -187,11 +185,7 @@ public class Population {
 						.collect(Collectors.toMap(
 								Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
-		ArrayList<Entity> top = new ArrayList<>();
-
-		top.addAll(best.keySet());
-
-		this.entities = top;
+		this.entities = new ArrayList<>(best.keySet());
 	}
 
 	String getBest() {
@@ -217,7 +211,7 @@ public class Population {
 		while (count < Population.POPULATION_SIZE) {
 			ArrayList<Entity> parents = generateParentsMonteCarlo();
 			Entity child = parents.get(0).equalChanceCrossover(parents.get(1));
-			child.mutate(0.01);
+			child.mutate();
 			add(child);
 			count++;
 		}

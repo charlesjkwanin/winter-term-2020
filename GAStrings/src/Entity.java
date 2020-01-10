@@ -113,7 +113,6 @@ public class Entity {
                 child.DNA[i] = otherParent.toString().charAt(i);
             }
         }
-
         return child;
     }
 

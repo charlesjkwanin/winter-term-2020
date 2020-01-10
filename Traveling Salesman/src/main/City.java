@@ -2,19 +2,10 @@ package main;
 
 import processing.core.PApplet;
 
-import java.util.Random;
-
 public class City {
     private PApplet sketch;
     private int x;
     private int y;
-
-    City(PApplet sketch) {
-        this.sketch = sketch;
-        Random rand = new Random();
-        this.x = rand.nextInt(200);
-        this.y = rand.nextInt(200);
-    }
 
     City(PApplet sketch, int x, int y) {
         this.sketch = sketch;
@@ -22,25 +13,40 @@ public class City {
         this.y = y;
     }
 
-    int getX() {
+    /**
+     * @return The x coordinate of this city
+     */
+    private int getX() {
         return x;
     }
 
-    int getY() {
+    /**
+     *
+     * @return The y coordinate of this city
+     */
+    private int getY() {
         return y;
     }
 
+    /**
+     * Return the distance between this city, and nothera given city
+     * @param city A city to find the distance to
+     * @return The Euclidean distance between two points
+     */
     double getDistance(City city) {
-        double distX = Math.pow(this.getX() - city.getX(), 2);
-        double distY = Math.pow(this.getY() - city.getY(), 2);
-        return Math.sqrt(distX + distY);
+        double distX = this.getX() - city.getX();
+        double distY = this.getY() - city.getY();
+        return distX * distX + distY * distY;
     }
 
     public String toString() {
         return getX() + ", " + getY();
     }
 
-    public void render() {
+    /**
+     * Draw the given city on the screen as a circle
+     */
+    void render() {
         sketch.noFill();
         sketch.ellipse(getX(), getY(), 25, 25);
     }

@@ -49,20 +49,20 @@ public class Run {
         City city20 = new City(sketch, 160, 20);
         TourManager.addCity(city20);
 
-//        Population population = new Population(5, true);
-//
-//        System.out.println("Initial Distance: " + population.getFittest().getDistance());
-//
-//        population = population.evolvePopulation();
-//        int numberOfGenerations = 100;
-//        for (int i = 0; i < numberOfGenerations; i++) {
-//            population = population.evolvePopulation();
-//        }
-//
-//        System.out.println("Completed");
-//        System.out.println("Final Distance: " + population.getFittest().getDistance());
-//        System.out.println("Solution:");
-//        System.out.println(population.getFittest());
+        Population population = new Population(5, true);
+
+        System.out.println("Initial Distance: " + population.getFittest().getDistance());
+
+        population.naturalSelection();
+        int numberOfGenerations = 500;
+        for (int i = 0; i < numberOfGenerations; i++) {
+            population.naturalSelection();
+        }
+
+        System.out.println("Completed");
+        System.out.println("Final Distance: " + population.getFittest().getDistance());
+        System.out.println("Solution:");
+        System.out.println(population.getFittest());
     }
 
 

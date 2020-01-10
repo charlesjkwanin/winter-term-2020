@@ -36,3 +36,83 @@
 	System.out.println("Child 2 " + child2);
 	System.out.println("Child 3 " + child3);
 	System.out.println("Child 4 " + child4);
+
+
+	//     private static void run(Population p, String target) {
+    //		int generations = 1;
+    //
+    //		while (!p.generationBestString.equals(target)) {
+    //	    System.out.println("Generation " + generations);
+    //
+    //	    Population newPopulation = new Population();
+    //
+    //	    int count = 0;
+    //
+    //	    while(count < Population.POPULATION_SIZE) {
+    //		ArrayList<Entity> parents = p.generateParentsWheel();
+    //		Entity child = parents.get(0).equalChanceCrossover(parents.get(1));
+    //		child.mutate(0.01);
+    //		newPopulation.add(child);
+    //		count++;
+    //	    }
+    //
+    //	    newPopulation.findBest();
+    //
+    //	    System.out.println("The best string of generation " + generations + " is: " + newPopulation.generationBestString);
+    //
+    //	    if (newPopulation.generationBestString.equals(target)) {break;}
+    //
+    //	    generations++;
+    //
+    //	    System.out.println();
+    //
+    //	    p = newPopulation;
+    //
+    //	    p.target = target;
+    //
+    //	    p.findBest();
+    //
+    //	    if (generations > 1000) {
+    //		break;
+    //	    }
+    //	}
+    //
+    //	System.out.println();
+    //	generations--;
+    //	System.out.println("The overall best string after " + generations + " generations is: " + p.generationBestString);
+    //    }
+
+
+    void run() {
+    		Population p = this;
+    		while (!p.generationBestString.equals(target)) {
+    			System.out.println("Generation " + generations);
+    			int count = 0;
+
+    			// create 1000 new children
+    			// then choose the top 1000 best fitting entities between children and parents, and proceed.
+    			while (count < Population.POPULATION_SIZE) {
+    				ArrayList<Entity> parents = p.generateParentsMonteCarlo();
+    				Entity child = parents.get(0).equalChanceCrossover(parents.get(1));
+    				child.mutate(0.01);
+    				p.add(child);
+    				count++;
+    			}
+    			p.findBest();
+
+    			System.out.println("The best string of generation " + generations + " is: " + p.generationBestString);
+    			selectBestFitCandidates(); // choose the best 1000 candidates from the current entity list of children and parents
+
+    			if (p.generationBestString.equals(target)) {
+    				break;
+    			}
+    			System.out.println();
+
+    			if (generations > 1000) {
+    				break;
+    			}
+    			generations++;
+    		}
+    		System.out.println();
+    		System.out.println("The overall best string after " + generations + " generations is: " + p.generationBestString);
+    	}

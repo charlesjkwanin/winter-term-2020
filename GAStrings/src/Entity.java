@@ -7,11 +7,12 @@ import java.util.Random;
  * 1/5/20
  */
 public class Entity {
-    private static final int MAX_LENGTH = 18; // the length of the DNA. Arbitrarily chosen at the moment
+    private static final int MAX_LENGTH = 19; // the length of the DNA. Arbitrarily chosen at the moment
     private Character[] DNA = new Character[MAX_LENGTH]; // the DNA of this entity
-    private char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' '};
+    private char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ', ',', '.'};
     private String target;
     private Random rand;
+    private int alphabetLength = alphabet.length;
 
     /**
      * Construct a new entity, with a randomly generated DNA
@@ -20,20 +21,20 @@ public class Entity {
         this.target = target;
         // TODO: maybe use proportions so that some of the most frequently used letters appear more often than not
         this.rand = new Random();
-        int randomNumber = rand.nextInt(27);
+        int randomNumber = rand.nextInt(alphabetLength);
         for (int i = 0; i < MAX_LENGTH; i++) {
             DNA[i] = alphabet[randomNumber];
-            randomNumber = rand.nextInt(27);
+            randomNumber = rand.nextInt(alphabetLength);
         }
 
     }
 
     public Entity() {
         this.rand = new Random();
-        int randomNumber = rand.nextInt(27);
+        int randomNumber = rand.nextInt(alphabetLength);
         for (int i = 0; i < MAX_LENGTH; i++) {
             DNA[i] = alphabet[randomNumber];
-            randomNumber = rand.nextInt(27);
+            randomNumber = rand.nextInt(alphabetLength);
         }
 
         this.rand = new Random();
@@ -125,7 +126,7 @@ public class Entity {
 
         for (int i = 0; i < MAX_LENGTH; i++) {
             if (rand.nextDouble() < mutationRate) {
-                this.DNA[i] = alphabet[rand.nextInt(27)];
+                this.DNA[i] = alphabet[rand.nextInt(alphabetLength)];
             }
         }
     }

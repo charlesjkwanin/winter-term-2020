@@ -3,12 +3,10 @@ package main;
 import processing.core.PApplet;
 import processing.core.PFont;
 
-import static main.Population.mutationRate;
-
 public class Render extends PApplet {
-    PFont f;
-    Population population;
-    int numberOfGenerations;
+    private PFont f;
+    private Population population;
+    private int initialDist;
 
     public static void main(String[] args) {
         PApplet.main("main.Render");
@@ -61,8 +59,8 @@ public class Render extends PApplet {
         size(400, 400);
 
         population = new Population(5, true);
-        numberOfGenerations = 100;
-        System.out.println("Initial Distance: " + population.getFittest().getDistance());
+        initialDist = (int) population.getFittest().getDistance();
+
     }
 
     @Override
@@ -73,37 +71,33 @@ public class Render extends PApplet {
 
     @Override
     public void draw() {
-        // TODO: Do your drawing for each frame here
-        System.out.println("Initial Distance: " + population.getFittest().getDistance());
+        background(255);
+        displayInitialInfo();
 
-        population = population.evolvePopulation();
-
-        population.getFittest().render();
+        population.naturalSelection();
 
         displayInfo();
+
+        if (population.isFinished()) {
+            noLoop();
+        }
     }
 
-    void displayInfo() {
-        background(255);
-        // Display current status of populationation
-        Tour fittest = population.getFittest();
-        textFont(f);
-        textAlign(LEFT);
-        fill(0);
+    private void displayInitialInfo() {
+        textFont(f, 18);
+        text("Initial Distance: " + initialDist, 30, 300);
+
+    }
+
+    private void displayInfo() {
+        // Display current state of population
+        textFont(f, 18);
+        text("Population Size: " + population.populationSize(), 30, 270);
+        text("Current Best Distance: " + population.getFittest().getDistance(), 30, 330);
+        population.getFittest().render();
+        text("Number of Generations: " + population.getGenerations(), 30, 360);
 
 
-        textSize(16);
-        text("Best phrase:", 20, 30);
-        textSize(32);
-        text(fittest.toString(), 20, 75);
-
-        textSize(12);
-        //text("total generations: " + population., 20, 140);
-        text("total populationation: " + population.populationSize(), 20, 170);
-        text("mutation rate: " + (mutationRate * 100) + "%", 20, 185);
-
-        textSize(10);
-        //text("All phrases:\n" + population.allPhrases(), 450, 10);
     }
 
 

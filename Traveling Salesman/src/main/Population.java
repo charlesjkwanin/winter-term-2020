@@ -2,8 +2,9 @@ package main;
 
 public class Population {
     static double mutationRate = 0.01;
-    Tour[] tours;
+    private Tour[] tours;
     private int tournamentSize = 5;
+    private int generations = 1;
 
     Population(int populationSize, boolean initialize) {
         tours = new Tour[populationSize];
@@ -43,7 +44,7 @@ public class Population {
      *
      * @return The tour that wins the tournament
      */
-    Tour tournamentSelection() {
+    private Tour tournamentSelection() {
         Population tournament = new Population(tournamentSize, false);
         for (int i = 0; i < tournamentSize; i++) {
             int idx = (int) (MonteCarlo() * populationSize());
@@ -71,7 +72,14 @@ public class Population {
         return random;
     }
 
-    Tour crossover(Tour parent1, Tour parent2) {
+    /**
+     * Create a new child using the genes from the two given parents
+     *
+     * @param parent1 Parent 1
+     * @param parent2 Parent 2
+     * @return A child created using the genes of the parents
+     */
+    private Tour crossover(Tour parent1, Tour parent2) {
         Tour child = new Tour();
 
         int startPosition = (int) (Math.random() * parent1.tourSize());
@@ -105,7 +113,10 @@ public class Population {
         return child;
     }
 
-    Population evolvePopulation() {
+    /**
+     * Evolve a new generation of Tours
+     */
+    void naturalSelection() {
         Population newPopulation = new Population(this.populationSize(), false);
 
         for (int i = 0; i < newPopulation.populationSize(); i++) {
@@ -117,8 +128,9 @@ public class Population {
             child.mutate();
             newPopulation.saveTour(i, child);
         }
+        generations++;
+        this.tours = newPopulation.tours;
 
-        return newPopulation;
     }
 
     public String toString() {
@@ -129,4 +141,14 @@ public class Population {
         }
         return sb.toString();
     }
+
+    boolean isFinished() {
+        return generations == 500;
+    }
+
+
+    int getGenerations() {
+        return generations;
+    }
+
 }

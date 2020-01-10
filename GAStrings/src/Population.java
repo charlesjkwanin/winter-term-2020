@@ -206,7 +206,6 @@ public class Population {
 
 	void naturalSelection() {
 		int count = 0;
-		// create 1000 new children
 		// then choose the top 1000 best fitting entities between children and parents, and proceed.
 		while (count < Population.POPULATION_SIZE) {
 			ArrayList<Entity> parents = generateParentsMonteCarlo();

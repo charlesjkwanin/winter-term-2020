@@ -18,6 +18,7 @@ class MyKMeans:
 		self.cluster_centers = []
 		self.random_state = random_state
 		self.labels = None
+		self.distance = None
 
 	def kmeans(self, ):
 		pass
@@ -40,7 +41,7 @@ class MyKMeans:
 			self.cluster_centers = self.compute_centers(x, self.labels)  # recompute cluster centers
 			if np.all(old_centers == self.cluster_centers):  # if cluster centers don't change, break
 				break
-		self.error = self.compute_sse(x, self.labels, self.cluster_centers)  # calculate the score of the
+			self.error = self.compute_sse(x, self.labels, self.cluster_centers)  # calculate the score of the
 
 	def compute_centers(self, x, labels):
 		centers = np.zeros((self.n_clusters, x.shape[1]))
@@ -53,6 +54,7 @@ class MyKMeans:
 		for i in range(self.n_clusters):
 			normal_row = norm(x - centers[i, :], axis=1)
 			distance[:, i] = np.square(normal_row)
+		self.distance = distance
 		return distance
 
 	def find_closest_cluster(self, distance):
@@ -86,6 +88,9 @@ class MyKMeans:
 	def set_params(self, **kwargs):
 		pass
 
+	def get_distance(self):
+		return self.distance
+
 
 def main():
 	my_kmeans = MyKMeans(3)
@@ -95,29 +100,11 @@ def main():
 
 	my_kmeans.fit(X)
 	print("My KMeans score", my_kmeans.score(X))
+	print(my_kmeans.find_closest_cluster(my_kmeans.get_distance()))
 
-	sk_kmeans = KMeans(3)
-	sk_kmeans.fit(X)
-	print("sklearn KMeans score", sk_kmeans.score(X))
-
-	data1 = pd.DataFrame(X, columns=iris.feature_names)
-
-	data1 = data1.rename(columns={'sepal length (cm)': 'sepal_length', 'sepal width (cm)': 'sepal_width',
-	                              'petal length (cm)': 'petal_length', 'petal width (cm)': 'petal_width'})
-
-	data1['target'] = y
-	sns.lmplot('petal_length', 'petal_width', data1)
-	sns.pairplot(data1, hue='target')
-
-	d_x = sk_kmeans.fit_transform(X)
-
-	d_x = pd.DataFrame(d_x)
-
-	sns.pairplot(d_x, palette=d_x.columns)
-
-	print(d_x.head(5))
-
-	plt.show()
+	# sk_kmeans = KMeans(3)
+	# sk_kmeans.fit(X)
+	# #print("sklearn KMeans score", sk_kmeans.score(X))
 
 
 if __name__ == '__main__':
